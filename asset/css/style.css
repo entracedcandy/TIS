@@ -1,0 +1,76 @@
+:root{
+    color-scheme: only-light;
+    --custom-maroon: #B04759;
+}
+
+.login-body{
+    background: rgb(148,187,233);
+    background: radial-gradient(circle, rgba(148,187,233,1) 0%, rgba(17,35,90,1) 100%);
+    /* background: linear-gradient(135deg, #1a2a4a 0%, #0d1b35 60%, #2c1a0e 100%); */
+    /* min-height: 100vh; */
+    /* background: linear-gradient(145deg, #3b2800 0%, #6b4400 40%, #1a2a4a 100%); */
+    font-family: "Roboto", sans-serif;
+}
+
+.card-trnspt { 
+    border-top-color: rgba(225, 225, 225, 0.5); 
+    border-left-color: rgba(225, 225, 225, 0.5); 
+    border-bottom-color: rgba(225, 225, 225, 0.1); 
+    border-right-color: rgba(225, 225, 225, 0.1);
+    
+    box-shadow: 1.3rem 1.3rem 1.3rem rgba(0, 0, 0, 0.2);
+
+    background-color: rgba(225, 225, 225, 0.1); 
+}
+
+.sdw{
+    text-shadow: 1.3rem 1.3rem 1.3rem rgba(0, 0, 0, 0.3);
+}
+
+.sdw-img{
+    -webkit-filter: drop-shadow(1.3rem 1.3rem 1.3rem rgba(0, 0, 0, 0.4));
+    filter: drop-shadow(1.3rem 1.3rem 1.3rem rgba(0, 0, 0, 0.4));
+}
+
+.animation__fdin {
+    -webkit-animation: fdin 1500ms;
+    animation: fdin 1500ms;
+  }
+
+@keyframes fdin {
+    0%   {opacity:0;}
+    100% {opacity:1;}
+}
+
+.menu-font {
+    font-size: 13px;
+}
+
+table.table td.maroon {
+    background-color: var(--custom-maroon);
+}
+
+.myFont{
+    font-size:11px;
+}
+
+.modal-min {
+    height: 50vh;
+}
+
+.fixed-column {
+    position: sticky;
+    right: 0;
+    z-index: 1;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

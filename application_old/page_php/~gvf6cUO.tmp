@@ -1,0 +1,444 @@
+<?php
+  require_once("../../assets/php/Custom_Library.php");
+  require("../../assets/php/connection/dbconnect1.php");
+	
+switch ($mode) 
+{ 
+
+    case "init_load_header_compartment":
+
+        $query = "SELECT * FROM dr_d_var where";
+        $query = $query . " id_dr='" . $id_dr . "'";
+        //$query = $query . " order by header_compartment, seq";
+        $query = $query . " order by seq";
+		
+      
+		$query = mysqli_query($con,$query);
+		$rows = array();
+
+		while($tmp= mysqli_fetch_array($query)) 
+		{
+			$rows[] = $tmp;
+		}
+
+		echo json_encode($rows);
+		
+		mysqli_close($con);
+
+    break;
+	case "init_execute_query_source":
+
+	
+		$query = str_replace("\'", "'", $query_source);
+
+		
+		if ($query != "") 
+		{
+			if ($query_connection == '1') //mysql
+			{
+				$result = mysqli_query($con,$query);
+				
+				while($row = mysqli_fetch_array($result))
+				{
+					if ($response == "")
+					{
+						$response = '<option></option>';
+					}
+				
+					$response = $response . '<option value="'.$row[0].'">'.$row[1].'</option>';
+					
+				}
+				mysqli_close($con);
+			} 
+			else if ($query_connection == '2' || $query_connection == 'qc' || $query_connection == '5') //sqlserver
+			{
+				require("../../assets/php/connection/dbconnect".$query_connection.".php");
+				
+				$result   = sqlsrv_query($conn, $query);
+
+				
+				do 
+				{
+					while ($row = sqlsrv_fetch_array($result)) 
+					{
+						if ($response == "")
+						{
+						$response = '<option selected="selected"></option>';
+						}
+						
+						$response = $response . '<option value="'.$row[0].'">'.$row[1].'</option>';
+					}
+				} 
+				while ( sqlsrv_next_result($result) );
+
+
+				sqlsrv_free_stmt( $result);
+				sqlsrv_close( $result);
+			}
+
+		}
+
+    break;
+
+	case "init_load_bagian":
+
+		//require("../../assets/php/"+$connection);
+		//var_dump("../../assets/php/".$connect);
+		//;
+		require("../../assets/php/connection/dbconnect".$connect.".php");
+	
+		
+
+		$query = "SELECT distinct(master_alias.ori) as id
+			, master_alias.alias as caption
+			from
+			master_user
+			, master_alias
+	
+			where
+			master_alias.ori = master_user.group_user
+			AND master_user.department ='" . $value_1 . "'
+			order by master_alias.ori
+			";
+	
+			$result = mysqli_query($con,$query);
+			while($row = mysqli_fetch_array($result))
+			{
+			  if ($response == "")
+			  {
+				$response = '<option selected="selected"></option>';
+			  }
+			  
+			  $response = $response . '<option value="'.$row['id'].'">'.$row['caption'].'</option>';
+			}
+			/*$result   = mysqli_query($con, $query);
+			$colcount = mysqli_num_fields($result);
+			while ($tmp = mysqli_fetch_array($result)) 
+			{
+				$rows[] = $tmp;
+			}
+			//var_dump($rows);
+			echo json_encode($rows);*/
+
+	
+    break;
+	case "init_load_feed_code_from_mixer":
+		require("../../assets/php/".$connection);
+		
+		error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
+		if ($value_1 == "MX30_1") 
+		{
+			$value_1 = "18";
+		} 
+		else if ($value_1 == "MX32_1") 
+		{
+			$value_1 = "34";
+		} 
+		else if ($value_1 == "MX33_1") 
+		{
+			$value_1 = "43";
+		}
+	
+		$query = $query . " SELECT distinct(Planning.idco) as id
+			, article.code as caption
+	
+			from Planning
+			,article
+			where
+			article.idco = planning.idco
+			AND idmenu = '" . $value_1 . "'
+			order by article.code
+			";
+	
+			$result   = sqlsrv_query($conn, $query);
+
+			while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC))
+			{
+				if ($response == "")
+				{
+				$response = '<option selected="selected"></option>';
+				}
+				
+				$response = $response . '<option value="'.$row['id'].'">'.$row['caption'].'</option>';
+			}
+	
+			sqlsrv_close( $conn);
+
+	break;
+	case "init_load_po_no_from_mixer":
+		require("../../assets/php/".$connection);
+
+		error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
+		if ($value_1 == "MX30_1") {
+			$value_1 = "18";
+		} else if ($value_1 == "MX32_1") {
+			$value_1 = "34";
+		} else if ($value_1 == "MX33_1") {
+			$value_1 = "43";
+		}
+	
+		$query = $query . " select";
+		$query = $query . " Planning.IdPlanning as id";
+		$query = $query . " , Planning.IdCommande as caption";
+		$query = $query . " FROM Planning";
+		$query = $query . " where";
+		$query = $query . " idmenu = '" . $value_1 . "'";
+		$query = $query . " AND idCo  = '" . $value_2 . "'";
+		$query = $query . " order by Planning.IdCommande";
+	
+		//echo $query . "</br></br>";
+	
+		$result   = sqlsrv_query($conn, $query);
+
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC))
+		{
+			if ($response == "")
+			{
+			$response = '<option selected="selected"></option>';
+			}
+			
+			$response = $response . '<option value="'.$row['id'].'">'.$row['caption'].'</option>';
+		}
+
+		sqlsrv_close( $conn);
+	break;
+	case "init_load_po_qc":
+
+		require("../../assets/php/connection/dbconnect".$connect.".php");
+
+		error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
+		if ($value_1 == "external") {
+			$value_1 = "1861%";
+		} else {
+			$value_1 = "1861%";
+		}
+
+		$query = $query . " select";
+		$query = $query . " distinct(po) as id , po as caption ";
+		$query = $query . " FROM TB_QC_INCOMING_TRUCK";
+		$query = $query . " where";
+		$query = $query . " po LIKE '" . $value_1 . "'";
+
+		//echo $query . "</br></br>";
+
+		$result   = sqlsrv_query($conn, $query);
+
+		
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC))
+		{
+			if ($response == "")
+			{
+			$response = '<option selected="selected"></option>';
+			}
+			
+			$response = $response . '<option value="'.$row['id'].'">'.$row['caption'].'</option>';
+		}
+
+		sqlsrv_close( $conn);
+	break;
+
+	case "init_list_data_head";
+		if ($id_dr == "DR-2022-00001") 
+		{
+			
+			$query = "CALL Sp_task_report_head('" . $value_3 . "','" . $value_1 . "','" . $value_2 . "')";
+		} 
+		else 
+		{
+			$query = "SELECT seq, caption FROM dr_d_col_name where";
+			$query = $query . " id_dr='" . $id_dr . "'";
+			$query = $query . " order by seq";
+		}
+
+		$result = mysqli_query($con,$query);
+		while($row = mysqli_fetch_array($result))
+		{
+			
+			$response = $response . '<th>'.$row["caption"].'</th>';
+		}
+	break; 
+
+	case "load_list_data_body";
+
+	if($id_dr == "DR-2017-00002")
+	{
+		//var_dump($value_1,$value_3,$value_4,$value_5,$value_6,$value_7,$value_8,$value_9,$value_10);
+		$query = "
+			SELECT
+			 y.id_cost_center AS cost
+			,(SELECT caption FROM master_user WHERE id_user = y.id_user) AS user
+			,(SELECT rec_spl_d.id_shift FROM rec_spl_d WHERE rec_spl_d.id_spl = x.id_spl AND rec_spl_d.seq = x.seq) AS shift
+			,(SELECT alias FROM master_alias WHERE ori = y.group_user ) AS group_user_caption
+			,(SELECT rec_spl_d.task FROM rec_spl_d WHERE rec_spl_d.id_spl = x.id_spl AND rec_spl_d.seq = x.seq) AS task
+			,(SELECT DATE_FORMAT(rec_spl_d.start, '%H:%i')from rec_spl_d WHERE rec_spl_d.id_spl = x.id_spl AND rec_spl_d.seq = x.seq) AS start
+			,(SELECT DATE_FORMAT(rec_spl_d.finish, '%H:%i') FROM rec_spl_d WHERE rec_spl_d.id_spl = x.id_spl AND rec_spl_d.seq = x.seq) AS finish
+			,(SELECT rec_spl_d.totalduration FROM rec_spl_d WHERE rec_spl_d.id_spl = x.id_spl AND rec_spl_d.seq = x.seq) AS total_final
+			,y.vendor AS vendor
+			,x.id_spl AS spl
+			,y.department
+			,y.group_user
+			,y.id_cost_center
+			,(SELECT rec_spl_d.created FROM rec_spl_d WHERE rec_spl_d.id_spl = x.id_spl AND rec_spl_d.seq = x.seq) AS created
+			,'" . $value_1 . "' AS date_purposed
+
+			FROM `rec_spl_d_user` x, master_user_detail y
+
+			WHERE
+			x.id_spl IN
+			(
+				SELECT distinct(rec_spl_d.id_spl) FROM rec_spl_d
+				WHERE rec_spl_d.id_spl in
+				(
+					SELECT rec_spl_h.id_spl FROM rec_spl_h
+					WHERE
+					rec_spl_h.date_purposed ='" . $value_1 . "'
+				)
+			)
+
+			AND x.id_user = y.id_user
+			AND x.id_user_detail = y.id_user_detail
+			AND not ('" . $value_1 . "'not between y.periode_start
+			AND y.periode_end AND '" . $value_1 . "' not between y.periode_start AND y.periode_end)
+
+			";
+
+        if ($value_10 == "Lembur") {
+            $query .= " AND (x.category = '" . $value_10 . "' OR x.category = '') ";
+        } else {
+            $query .= " AND (x.category = '" . $value_10 . "') ";
+        }
+
+        if ($value_9 != "") {
+            $query = $query . " AND y.id_user in (" . $value_9 . ")";
+        }
+
+        if ($group_user != "PGA"
+            AND $group_user != "koor_os_lam"
+            AND $group_user != "koor_os_gks"
+            AND $group_user != "koor_os_lar"
+            AND $group_user != "koor_os_wjm"
+            AND $group_user != "koor_os_ccc"
+            AND $group_user != "koor_os_swp"
+            AND $group_user != "koor_os_mja"
+            AND $group_user != "koor_os_mdp"
+            AND $group_user != "admin_prod"
+            AND $group_user != "admin_factory_management"
+            AND $group_user != "administrator"
+            AND $group_user != "plant_manager"
+            AND $group_user != "HRD") {
+            if ($value_4 != "") {
+                $query = $query . "	AND y.department ='" . $value_4 . "'";
+            }
+        } else {
+            if ($value_4 != "") {
+                $query = $query . "	AND (SELECT rec_spl_h.department FROM rec_spl_h WHERE rec_spl_h.id_spl = x.id_spl) = '" . $value_4 . "' ";
+            } else {
+                $query = $query . "	and(SELECT rec_spl_h.department FROM rec_spl_h WHERE rec_spl_h.id_spl = x.id_spl) <> ''";
+            }
+        }
+
+        if ($value_2 == "Permanent") {
+            $query = $query . "and y.vendor like 'CPI%'";
+        } else if ($value_2 == "Non Permanent") {
+            $query = $query . "and y.vendor not like 'CPI%'";
+        }
+
+        if ($value_3 != "") {
+            $query = $query . "and y.vendor ='" . $value_3 . "'";
+        }
+
+        if ($value_8 != "") //if ($value_10 != "")
+        {
+            $query = $query . "and  y.id_cost_center  ='" . $value_8 . "'";
+        }
+
+        if ($value_6 != "") {
+            $query = $query . "and y.group_user ='" . $value_6 . "'";
+        }
+
+        if ($value_4 == 'feed_processing') {
+            if ($value_7 == "operator") {
+                $query = $query . " AND y.group_user not in ('fm_cleanes_work_c','hand_add','forklift_hand_add')";
+            } else if ($value_7 == "penunjang_hand_add") {
+                $query = $query . "	AND y.group_user in ('hand_add','forklift_hand_add')";
+            } else if ($value_7 == "kebersihan") {
+                $query = $query . "	AND y.group_user = 'fm_cleanes_work_c'";
+            }
+        } else if ($value_4 == 'warehouse') {
+            if ($value_7 == "operator") {
+                $query = $query . "and";
+                $query = $query . "	 y.group_user not in ('rm_cleanes_work_c','kebersihan_lingkungan','sd_cleanes_work_c','borongan_bongkar','borongan_bongkar_repallet','borongan_bongkar_sortir','borongan_bongkar_stapel','outside_wh_rw_helper')";
+            } else if ($value_7 == "kebersihan") {
+                $query = $query . "and";
+                $query = $query . "	y.group_user in('rm_cleanes_work_c','kebersihan_lingkungan','sd_cleanes_work_c')";
+            } else if ($value_7 == "borongan") {
+                $query = $query . "and";
+                $query = $query . "	 y.group_user in('borongan_bongkar','borongan_bongkar_repallet','borongan_bongkar_sortir','borongan_bongkar_stapel','outside_wh_rw_helper')";
+            }
+        } else if ($value_4 == 'finish_good') {
+            if ($value_7 == "operator") {
+                $query = $query . "and";
+                $query = $query . "	 y.group_user not in ('fg_cleanes_work_c')";
+            } else if ($value_7 == "kebersihan") {
+                $query = $query . "and";
+                $query = $query . "	 y.group_user in('fg_cleanes_work_c')";
+            } else if ($value_7 == "harian_fg") {
+                $query = $query . "and";
+                $query = $query . "	 y.group_user in('fg_cleanes_work_c','user_fg','kerani_muat','opr_forklift_muat')";
+            }
+        }
+
+        if ($value_5 == "silo") {
+            $query = $query . "and";
+            $query = $query . "	 y.group_user in('spv_silo_dryer','silo_helper'
+				,'silo_dryer_helper','opr_silo_helper','admin_silo_dryer'
+				,'sd_cleanes_work_c','yellow_corn_sampling_helper','kerani_rm_sd'
+					,'maintenance_sd','tilting_helper','opr_tungku_helper','penunjang_silo','maintenance_silo') ";
+        } else if ($value_5 == "raw_material") {
+            $query = $query . "and";
+            $query = $query . "	 y.group_user in('rm_preparation_helper','spv_raw_material','kerani_rm_helper','kerani_rm_liquid_helper','opr_forklift_rm','operator_forklift_repack_finish_good'
+									,'pengawas_rm','admin_raw_material','kerani_rm','kerani_rm_gudang_luar','koor_forklift_rm','rm_cleanes_work_c','outside_wh_rw_helper','segel','penunjang_mixer') ";
+        } else if ($value_5 == "store_room") {
+            $query = $query . "and";
+            $query = $query . "	 y.group_user in('penunjang_gulung_karung','penunjang_sablon_sak','ass_staff_label_sak_baru','staff_store_room'
+									,'admin_label_sak_baru','staff_karung_sak_bekas','spv_store_room') ";
+        }
+
+        $query = $query . "ORDER BY
+			(SELECT rec_spl_h.date_purposed FROM rec_spl_h WHERE rec_spl_h.id_spl = x.id_spl)
+			, id_spl
+			, seq
+			, (SELECT caption FROM master_user WHERE id_user = y.id_user)";
+        //echo $query;
+
+        $result   = mysqli_query($con, $query);
+        $colcount = mysqli_num_fields($result);
+        $rowcount = mysqli_num_rows($result);
+		$rows = array();
+
+		while($row= mysqli_fetch_array($result)) 
+		{
+			$rows[] = $row;
+		}
+		
+		var_dump($rows);
+		echo json_encode($rows);
+		
+		mysqli_close($con);
+
+       
+	}
+		
+	break; 
+   
+
+    default:
+
+    $response = "mode_not_available";
+}
+
+echo $response;
+
+
+
+?>
