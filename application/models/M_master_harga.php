@@ -1345,8 +1345,8 @@ class M_master_harga extends CI_Model {
         // Ambil harga DOC dari T-1 bulan
         $harga_doc_t_minus_1_month = $this->_get_harga_doc_t_minus_1_month();
         
-        // Ambil Cost Komplit Broiler dari harian
-        $cost_komplit_broiler = $this->_get_harga_terbaru_harian('cost_komplit_broiler');
+        // Ambil Pakan Komplit Broiler dari master harga
+        $pakan_komplit_broiler = $this->_get_harga_by_nama('Pakan Komplit Broiler');
         
         // --- Ambil Variabel Komponen dari Master Harga ---
         $ongkos_ovk = $this->_get_harga_by_nama('Ongkos OVK Broiler');
@@ -1355,8 +1355,8 @@ class M_master_harga extends CI_Model {
         $target_profit = $this->_get_harga_by_nama('Target Profit Broiler');
         
         // Validasi: Pastikan semua variabel ada dan valid
-        if ($harga_doc_t_minus_1_month == 0 || $cost_komplit_broiler == 0) {
-            log_message('error', "Gagal menghitung HPP Broiler: Harga DOC (T-1Bln = $harga_doc_t_minus_1_month) atau Cost Komplit Broiler hari ini ($cost_komplit_broiler) tidak ditemukan (bernilai 0).");
+        if ($harga_doc_t_minus_1_month == 0 || $pakan_komplit_broiler == 0) {
+            log_message('error', "Gagal menghitung HPP Broiler: Harga DOC (T-1Bln = $harga_doc_t_minus_1_month) atau Pakan Komplit Broiler ($pakan_komplit_broiler) tidak ditemukan (bernilai 0).");
             return false;
         }
         
@@ -1365,28 +1365,25 @@ class M_master_harga extends CI_Model {
             return false;
         }
         
-        // Konversi Daya Hidup dari persen ke desimal (96 -> 0.96)
-        $daya_hidup_desimal = $daya_hidup_persen / 100;
-        
         // Log untuk debugging
         log_message('debug', "HPP Broiler Calculation:");
         log_message('debug', "- DOC (T-1 Bulan): $harga_doc_t_minus_1_month");
-        log_message('debug', "- Cost Komplit Broiler: $cost_komplit_broiler");
+        log_message('debug', "- Pakan Komplit Broiler: $pakan_komplit_broiler");
         log_message('debug', "- Ongkos OVK: $ongkos_ovk");
-        log_message('debug', "- Daya Hidup: $daya_hidup_persen% ($daya_hidup_desimal)");
+        log_message('debug', "- Daya Hidup: $daya_hidup_persen%");
         log_message('debug', "- Biaya Operasional: $biaya_operasional");
         log_message('debug', "- Target Profit: $target_profit");
         
-        // Hitung konstanta_tambahan secara dinamis
-        // Rumus: (((Ongkos OVK * 100) / Daya Hidup%) + Biaya Operasional + Target Profit) / 2
-        // Di mana Daya Hidup% dalam desimal (0.96)
-        $konstanta_tambahan = ($ongkos_ovk + $biaya_operasional + $target_profit) / 2;
-        
-        log_message('debug', "- Konstanta Tambahan: $konstanta_tambahan");
-        
-        // Hitung HPP Broiler
-        // Rumus: (DOC * Daya Hidup%) + (Cost * 1.8) + konstanta_tambahan
-        $nilai_akhir = ($harga_doc_t_minus_1_month * $daya_hidup_desimal) + ($cost_komplit_broiler * 1.8) + $konstanta_tambahan;
+        // Hitung HPP Broiler dengan rumus baru:
+        // (Pakan Komplit Broiler × 3.21) + (DOC × 0.9) + Target Profit + Biaya Operasional + (OVK × Daya Hidup%) / 2
+        // Rumus HPP Broiler - seluruhnya dibagi 2
+        $nilai_akhir = (
+            ($pakan_komplit_broiler * 3.21)
+            + ($harga_doc_t_minus_1_month * 0.9)
+            + $target_profit
+            + $biaya_operasional
+            + ($ongkos_ovk * $daya_hidup_persen)
+        ) / 2;
         
         log_message('debug', "- HPP Broiler Final: $nilai_akhir");
 
