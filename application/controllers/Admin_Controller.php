@@ -2206,19 +2206,33 @@ class Admin_Controller extends CI_Controller {
                     'display_field' => 'username'
                 ];
 
-            case 'Harga':
-                $all_harga = $this->M_master_harga->get_all_harga();
-                foreach ($all_harga as &$item) {
-                    $item['nilai_harga'] = number_format($item['nilai_harga'], 0, ',', '.');
-                }
-                return [
-                    'data' => $all_harga,
-                    'headers' => ['Nama Item', 'Harga', 'Terakhir Diupdate'],
-                    'fields' => ['nama_harga', 'nilai_harga', 'updated_at'],
-                    'primary_key' => 'id_harga',
-                    'display_field' => 'nama_harga'
-                ];
+                case 'Harga':
+            $nama_harga_tampil = [
+                'Pakan Komplit Broiler',
+                'Pakan Komplit Layer',
+                'Ongkos Kirim',
+                'DOC',
+                'Ongkos OVK Broiler',
+                'Daya Hidup Broiler (%)',
+                'Biaya Operasional Broiler',
+                'Target Profit Broiler',
+                'Pakan Campuran'
+            ];
 
+            $this->db->where_in('nama_harga', $nama_harga_tampil);
+            $this->db->order_by('id_harga', 'ASC');
+            $all_harga = $this->db->get('master_harga')->result_array();
+
+            foreach ($all_harga as &$item) {
+                $item['nilai_harga'] = number_format($item['nilai_harga'], 0, ',', '.');
+            }
+            return [
+                'data' => $all_harga,
+                'headers' => ['Nama Item', 'Harga', 'Terakhir Diupdate'],
+                'fields' => ['nama_harga', 'nilai_harga', 'updated_at'],
+                'primary_key' => 'id_harga',
+                'display_field' => 'nama_harga'
+            ];
             case 'Kontributor Harga':
                 $all_users = $this->M_edit_user->get_all_users_with_selection_status();
                 
