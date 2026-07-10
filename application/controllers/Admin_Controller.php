@@ -513,7 +513,7 @@ class Admin_Controller extends CI_Controller {
     {
         $data['users_without_target'] = $this->M_target->get_users_without_target();
         $data['title'] = 'CP APPS';
-        $data['page_title'] = 'Tambah Target Baru';
+        $data['page_title'] = 'Update Target';
 
         $this->load->view('templates/dash_h', $data);
         $this->load->view('add_target_view', $data); 
@@ -678,7 +678,7 @@ class Admin_Controller extends CI_Controller {
     {
         $data = [
             'title'               => 'CP APPS',
-            'page_title'          => 'Tambah User Baru',
+            'page_title'          => 'Update User',
             'kategori_selected'   => 'User', // Penting untuk view
             // Pastikan 'master_user_tambah' ada di tabel questions Anda
             'questions_kategori'  => $this->M_Questions->get_questions_by_page('master_user_tambah'), 
@@ -877,7 +877,7 @@ class Admin_Controller extends CI_Controller {
     {
         $data = [
             'title' => 'CP APPS',
-            'page_title' => 'Tambah Harga Baru',
+            'page_title' => 'Update Harga',
             'kategori_selected' => 'Harga',
             'questions_kategori' => $this->M_Questions->get_questions_by_page('master_harga_tambah'),
             'form_action' => site_url('Admin_Controller/create_harga_action')
@@ -899,7 +899,7 @@ class Admin_Controller extends CI_Controller {
             $insert_data[$field] = $jawaban;
         }
         $this->M_master_harga->create_harga($insert_data);
-        $this->session->set_flashdata('success', 'Harga baru berhasil ditambahkan!');
+        $this->session->set_flashdata('success', 'Harga baru berhasil diperbarui!');
         redirect('Admin_Controller/list_data/harga');
     }
 
