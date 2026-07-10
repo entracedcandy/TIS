@@ -63,7 +63,7 @@ class M_master_harga extends CI_Model {
             $nilai_rata_rata_hari_ini = $data_hari_ini->rata_rata_baru;
             $jumlah_sumber_data = $data_hari_ini->jumlah_data_baru;
         } else {
-            $tanggal_kemarin = date('Y-m-d', strtotime('-1 day'));
+            $tanggal_kemarin = date('Y-m-d', strtotime('-1 year'));
             $harga_kemarin = $this->db->get_where('harga_rata_rata_harian', [
                 'master_harga_id' => $id_harga,
                 'tanggal' => $tanggal_kemarin,
@@ -271,7 +271,7 @@ class M_master_harga extends CI_Model {
             $nilai_rata_rata_hari_ini = $data_hari_ini->rata_rata_baru;
             $jumlah_sumber_data = $data_hari_ini->jumlah_data_baru;
         } else {
-            $tanggal_kemarin = date('Y-m-d', strtotime('-1 day'));
+            $tanggal_kemarin = date('Y-m-d', strtotime('-1 year'));
             $harga_kemarin = $this->db->get_where('harga_rata_rata_harian', [
                 'master_harga_id' => $id_harga,
                 'tanggal' => $tanggal_kemarin,
@@ -387,7 +387,7 @@ class M_master_harga extends CI_Model {
             $nilai_rata_rata_hari_ini = $data_hari_ini->rata_rata_baru;
             $jumlah_sumber_data = $data_hari_ini->jumlah_data_baru;
         } else {
-            $tanggal_kemarin = date('Y-m-d', strtotime('-1 day'));
+            $tanggal_kemarin = date('Y-m-d', strtotime('-1 year'));
             $harga_kemarin = $this->db->get_where('harga_rata_rata_harian', [
                 'master_harga_id' => $id_harga,
                 'tanggal' => $tanggal_kemarin,
@@ -503,7 +503,7 @@ class M_master_harga extends CI_Model {
             $nilai_rata_rata_hari_ini = $data_hari_ini->rata_rata_baru;
             $jumlah_sumber_data = $data_hari_ini->jumlah_data_baru;
         } else {
-            $tanggal_kemarin = date('Y-m-d', strtotime('-1 day'));
+            $tanggal_kemarin = date('Y-m-d', strtotime('-1 year'));
             $harga_kemarin = $this->db->get_where('harga_rata_rata_harian', [
                 'master_harga_id' => $id_harga,
                 'tanggal' => $tanggal_kemarin,
@@ -585,7 +585,7 @@ class M_master_harga extends CI_Model {
             $nilai_rata_rata = $data_hari_ini->rata_rata_baru;
             $jumlah_sumber_data = $data_hari_ini->jumlah_data_baru;
         } else {
-            $harga_kemarin = $this->db->get_where('harga_rata_rata_harian', ['master_harga_id' => $id_harga, 'tanggal' => date('Y-m-d', strtotime('-1 day')), 'jenis_harga' => $jenis_harga])->row();
+            $harga_kemarin = $this->db->get_where('harga_rata_rata_harian', ['master_harga_id' => $id_harga, 'tanggal' => date('Y-m-d', strtotime('-1 year')), 'jenis_harga' => $jenis_harga])->row();
             $nilai_rata_rata = $harga_kemarin ? $harga_kemarin->nilai_rata_rata : 0;
         }
         
@@ -617,7 +617,7 @@ class M_master_harga extends CI_Model {
             $nilai_rata_rata = $data_hari_ini->rata_rata_baru;
             $jumlah_sumber_data = $data_hari_ini->jumlah_data_baru;
         } else {
-            $harga_kemarin = $this->db->get_where('harga_rata_rata_harian', ['master_harga_id' => $id_harga, 'tanggal' => date('Y-m-d', strtotime('-1 day')), 'jenis_harga' => $jenis_harga])->row();
+            $harga_kemarin = $this->db->get_where('harga_rata_rata_harian', ['master_harga_id' => $id_harga, 'tanggal' => date('Y-m-d', strtotime('-1 year')), 'jenis_harga' => $jenis_harga])->row();
             $nilai_rata_rata = $harga_kemarin ? $harga_kemarin->nilai_rata_rata : 0;
         }
         
@@ -649,7 +649,7 @@ class M_master_harga extends CI_Model {
             $nilai_rata_rata = $data_hari_ini->rata_rata_baru;
             $jumlah_sumber_data = $data_hari_ini->jumlah_data_baru;
         } else {
-            $harga_kemarin = $this->db->get_where('harga_rata_rata_harian', ['master_harga_id' => $id_harga, 'tanggal' => date('Y-m-d', strtotime('-1 day')), 'jenis_harga' => $jenis_harga])->row();
+            $harga_kemarin = $this->db->get_where('harga_rata_rata_harian', ['master_harga_id' => $id_harga, 'tanggal' => date('Y-m-d', strtotime('-1 year')), 'jenis_harga' => $jenis_harga])->row();
             $nilai_rata_rata = $harga_kemarin ? $harga_kemarin->nilai_rata_rata : 0;
         }
         
@@ -681,7 +681,7 @@ class M_master_harga extends CI_Model {
             $nilai_rata_rata = $data_hari_ini->rata_rata_baru;
             $jumlah_sumber_data = $data_hari_ini->jumlah_data_baru;
         } else {
-            $harga_kemarin = $this->db->get_where('harga_rata_rata_harian', ['master_harga_id' => $id_harga, 'tanggal' => date('Y-m-d', strtotime('-1 day')), 'jenis_harga' => $jenis_harga])->row();
+            $harga_kemarin = $this->db->get_where('harga_rata_rata_harian', ['master_harga_id' => $id_harga, 'tanggal' => date('Y-m-d', strtotime('-1 year')), 'jenis_harga' => $jenis_harga])->row();
             $nilai_rata_rata = $harga_kemarin ? $harga_kemarin->nilai_rata_rata : 0;
         }
         
@@ -1299,11 +1299,11 @@ class M_master_harga extends CI_Model {
      * @param string $nama_harga Nama item harga yang dicari.
      * @return float Nilai harga, atau 0 jika tidak ditemukan.
      */
-    private function _get_harga_by_nama($nama_harga)
+    private function _get_harga_by_nama($id)
     {
         $this->db->select('nilai_harga');
         $this->db->from('master_harga');
-        $this->db->where('nama_harga', $nama_harga);
+        $this->db->where('id_harga', $id);
         $result = $this->db->get()->row();
         return $result ? (float)$result->nilai_harga : 0;
     }
@@ -1343,16 +1343,18 @@ class M_master_harga extends CI_Model {
         $jenis_harga = 'hpp_broiler'; 
         
         // Ambil harga DOC dari T-1 bulan
-        $harga_doc_t_minus_1_month = $this->_get_harga_doc_t_minus_1_month();
+        // $harga_doc_t_minus_1_month = $this->_get_harga_doc_t_minus_1_month();
+
+        $harga_doc_t_minus_1_month = $this->_get_harga_by_nama('36');
         
         // Ambil Pakan Komplit Broiler dari master harga
-        $pakan_komplit_broiler = $this->_get_harga_by_nama('Pakan Komplit Broiler');
+        $pakan_komplit_broiler = $this->_get_harga_by_nama('35');
         
         // --- Ambil Variabel Komponen dari Master Harga ---
-        $ongkos_ovk = $this->_get_harga_by_nama('Ongkos OVK Broiler');
-        $daya_hidup_persen = $this->_get_harga_by_nama('Daya Hidup Broiler (%)'); // Dalam bentuk 96
-        $biaya_operasional = $this->_get_harga_by_nama('Biaya Operasional Broiler');
-        $target_profit = $this->_get_harga_by_nama('Target Profit Broiler');
+        $ongkos_ovk = $this->_get_harga_by_nama('23');
+        $daya_hidup_persen = $this->_get_harga_by_nama('24') / 100; // Dalam bentuk 96
+        $biaya_operasional = $this->_get_harga_by_nama('25');
+        $target_profit = $this->_get_harga_by_nama('26');
         
         // Validasi: Pastikan semua variabel ada dan valid
         if ($harga_doc_t_minus_1_month == 0 || $pakan_komplit_broiler == 0) {
@@ -1369,7 +1371,7 @@ class M_master_harga extends CI_Model {
         log_message('debug', "HPP Broiler Calculation:");
         log_message('debug', "- DOC (T-1 Bulan): $harga_doc_t_minus_1_month");
         log_message('debug', "- Pakan Komplit Broiler: $pakan_komplit_broiler");
-        log_message('debug', "- Ongkos OVK: $ongkos_ovk");
+        log_message('debug', "- Ongkos OVK: $ongkos_ovk");                  
         log_message('debug', "- Daya Hidup: $daya_hidup_persen%");
         log_message('debug', "- Biaya Operasional: $biaya_operasional");
         log_message('debug', "- Target Profit: $target_profit");
@@ -1377,13 +1379,8 @@ class M_master_harga extends CI_Model {
         // Hitung HPP Broiler dengan rumus baru:
         // (Pakan Komplit Broiler × 3.21) + (DOC × 0.9) + Target Profit + Biaya Operasional + (OVK × Daya Hidup%) / 2
         // Rumus HPP Broiler - seluruhnya dibagi 2
-        $nilai_akhir = (
-            ($pakan_komplit_broiler * 3.21)
-            + ($harga_doc_t_minus_1_month * 0.9)
-            + $target_profit
-            + $biaya_operasional
-            + ($ongkos_ovk * $daya_hidup_persen)
-        ) / 2;
+        $nilai_akhir = 
+        (($pakan_komplit_broiler * 3.21) + ($harga_doc_t_minus_1_month * 0.9) + ($target_profit + $biaya_operasional) + ($ongkos_ovk * $daya_hidup_persen))/2;
         
         log_message('debug', "- HPP Broiler Final: $nilai_akhir");
 
@@ -1782,7 +1779,7 @@ class M_master_harga extends CI_Model {
             }
 
             // --- 15. Proses HPP Broiler (Turunan) - HARUS SETELAH Cost dan Komponen ---
-            $id_hpp_broiler = $this->_get_id_by_nama_harga('Average HPP Broiler');
+            $id_hpp_broiler = 21;
             if ($id_hpp_broiler) {
                 // Bergantung pada: Harga DOC, Cost Komplit Broiler, dan 4 Komponen Broiler
                 $this->proses_hpp_broiler_harian($id_hpp_broiler);
