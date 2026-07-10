@@ -1339,7 +1339,9 @@ class M_master_harga extends CI_Model {
      */
     public function proses_hpp_broiler_harian($id_harga)
     {
-        $tanggal_hari_ini = date('Y-m-d');
+        
+
+        $tanggal_hari_ini = date("Y-m-d H:i:s");
         $jenis_harga = 'hpp_broiler'; 
         
         // Ambil harga DOC dari T-1 bulan
