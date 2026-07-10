@@ -1,0 +1,11 @@
+{
+    "intelephense.diagnostics.undefinedVariables": false,
+    "intelephense.diagnostics.undefinedProperties": false,
+    "intelephense.diagnostics.undefinedMethods": false,
+    "intelephense.diagnostics.undefinedFunctions": false,
+    "intelephense.diagnostics.undefinedConstants": false,
+    "intelephense.files.exclude": [
+        "**/vendor/**",
+        "**/application_old/**"
+    ]
+}

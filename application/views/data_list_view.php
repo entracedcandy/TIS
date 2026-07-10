@@ -74,7 +74,7 @@
                             ?>
 
                         <a href="<?= $add_url ?>" class="btn btn-success mb-3">
-                            <i class="fas fa-plus"></i> Tambah <?= htmlspecialchars($kategori_selected) ?>
+                            <i class="fas fa-plus"></i> Update <?= htmlspecialchars($kategori_selected) ?>
                         </a>
                     <?php endif; ?>
 
@@ -140,7 +140,7 @@
                                     <a href="<?= site_url('Admin_Controller/' . $method_name . '/' . $data[$primary_key]) ?>" 
                                         class="btn btn-edit btn-sm me-1" 
                                         title="Edit Data">
-                                        <i class="fas fa-edit"></i> Edit
+                                        <i class="fas fa-edit"></i> Update
                                     </a>
 
                                     <?php // Blok ini khusus untuk menampilkan tombol "Hitung Ulang" di halaman Harga ?>
@@ -208,18 +208,7 @@
                                             <a href="<?= site_url('Admin_Controller/hitung_ulang_hpp_broiler/' . $data[$primary_key]) ?>" class="btn btn-calculate btn-sm me-1" title="Hitung Ulang"> <i class="fas fa-calculator"></i> Hitung Ulang</a>
                                         <?php endif; ?>
 
-                                    <?php endif; ?>
-
-                                    <?php // --- AWAL TAMBAHAN KONDISI --- ?>
-                                        <?php if (isset($user_group) && $user_group !== 'surveyor'): ?>
-                                        
-                                            <button type="button" 
-                                                class="btn btn-delete btn-sm" 
-                                                onclick="confirmDelete('<?= $data[$primary_key] ?>', '<?= htmlspecialchars($data[$display_field] ?? 'data ini') ?>')"
-                                                title="Hapus Data">
-                                                <i class="fas fa-trash"></i> Hapus
-                                            </button>
-
+                                
                                         <?php endif; ?>
                                         <?php // --- AKHIR TAMBAHAN KONDISI --- ?>
                                 </td>
