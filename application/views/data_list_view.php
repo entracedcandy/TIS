@@ -134,28 +134,28 @@
                                 <tr>
                                     <td><?= $no++ ?></td>
                                     <?php foreach ($table_fields as $field): ?>
-    <td>
-        <?php if ($field === 'updated_at' && !empty($data[$field]) && $data[$field] !== '-'): ?>
-            <?php
-            $hari = ['Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa', 
-                     'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 
-                     'Saturday' => 'Sabtu'];
-            $bulan = ['January' => 'Jan', 'February' => 'Feb', 'March' => 'Mar',
-                      'April' => 'Apr', 'May' => 'Mei', 'June' => 'Jun',
-                      'July' => 'Jul', 'August' => 'Agu', 'September' => 'Sep',
-                      'October' => 'Okt', 'November' => 'Nov', 'December' => 'Des'];
-            
-            $timestamp = strtotime($data[$field]);
-            $nama_hari = $hari[date('l', $timestamp)];
-            $nama_bulan = $bulan[date('F', $timestamp)];
-            $tanggal_format = $nama_hari . ', ' . date('d', $timestamp) . ' ' . $nama_bulan . ' ' . date('Y H:i:s', $timestamp);
-            ?>
-            <?= $tanggal_format ?>
-        <?php else: ?>
-            <?= htmlspecialchars($data[$field] ?? '-') ?>
-        <?php endif; ?>
-    </td>
-<?php endforeach; ?>
+                                        <td>
+                                            <?php if ($field === 'updated_at' && !empty($data[$field]) && $data[$field] !== '-'): ?>
+                                                <?php
+                                                $hari = ['Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa', 
+                                                        'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 
+                                                        'Saturday' => 'Sabtu'];
+                                                $bulan = ['January' => 'Jan', 'February' => 'Feb', 'March' => 'Mar',
+                                                        'April' => 'Apr', 'May' => 'Mei', 'June' => 'Jun',
+                                                        'July' => 'Jul', 'August' => 'Agu', 'September' => 'Sep',
+                                                        'October' => 'Okt', 'November' => 'Nov', 'December' => 'Des'];
+                                                
+                                                $timestamp = strtotime($data[$field]);
+                                                $nama_hari = $hari[date('l', $timestamp)];
+                                                $nama_bulan = $bulan[date('F', $timestamp)];
+                                                $tanggal_format = $nama_hari . ', ' . date('d', $timestamp) . ' ' . $nama_bulan . ' ' . date('Y H:i:s', $timestamp);
+                                                ?>
+                                                <?= $tanggal_format ?>
+                                            <?php else: ?>
+                                                <?= htmlspecialchars($data[$field] ?? '-') ?>
+                                            <?php endif; ?>
+                                        </td>
+                                    <?php endforeach; ?>
                                     <td class="action-buttons">
                                     <a href="<?= site_url('Admin_Controller/' . $method_name . '/' . $data[$primary_key]) ?>" 
                                         class="btn btn-edit btn-sm me-1" 
