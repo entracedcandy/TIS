@@ -151,6 +151,27 @@
                                                 $tanggal_format = $nama_hari . ', ' . date('d', $timestamp) . ' ' . $nama_bulan . ' ' . date('Y H:i:s', $timestamp);
                                                 ?>
                                                 <?= $tanggal_format ?>
+
+                                                <?php
+                                                $item_dengan_indikator = [
+                                                    'Average Harga Telur Puyuh',
+                                                    'Average Harga Telur Bebek',
+                                                    'Average Harga Live Bird'
+                                                ];
+                                                ?>
+                                                <?php if (isset($data['nama_harga']) && in_array($data['nama_harga'], $item_dengan_indikator)): ?>
+                                                    <?php
+                                                    $selisih_hari = (time() - $timestamp) / (60 * 60 * 24);
+                                                    ?>
+                                                    <?php if ($selisih_hari <= 7): ?>
+                                                        <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background-color:#28a745; margin-left:5px;"></span>
+                                                        <small class="text-success fw-bold">Terupdate</small>
+                                                    <?php else: ?>
+                                                        <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background-color:#dc3545; margin-left:5px;"></span>
+                                                        <small class="text-danger fw-bold">Perlu Update</small>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+
                                             <?php else: ?>
                                                 <?= htmlspecialchars($data[$field] ?? '-') ?>
                                             <?php endif; ?>

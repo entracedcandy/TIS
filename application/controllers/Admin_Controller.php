@@ -1825,7 +1825,8 @@ class Admin_Controller extends CI_Controller {
                         'Ongkos OVK Broiler'              => 'ongkos_ovk_broiler',
                         'Daya Hidup Broiler (%)'          => 'daya_hidup_broiler',
                         'Biaya Operasional Broiler'       => 'biaya_operasional_broiler',
-                        'Target Profit Broiler'           => 'target_profit_broiler'
+                        'Target Profit Broiler'           => 'target_profit_broiler',
+                        'DOC'                             => 'harga_doc',
                     ];
 
                     
@@ -2216,7 +2217,10 @@ class Admin_Controller extends CI_Controller {
                 'Daya Hidup Broiler (%)',
                 'Biaya Operasional Broiler',
                 'Target Profit Broiler',
-                'Pakan Campuran'
+                'Pakan Campuran',
+                'Average Harga Telur Puyuh', 
+                'Average Harga Telur Bebek',  
+                'Average Harga Live Bird',    
             ];
 
             $this->db->where_in('nama_harga', $nama_harga_tampil);
