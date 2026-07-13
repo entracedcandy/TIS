@@ -1162,7 +1162,8 @@ class Dashboard_new extends MY_Controller
         $data['stat_hpp_konsentrat'] = $this->visual->get_harga_terbaru_by_jenis('hpp_konsentrat_layer');
         $data['stat_hpp_komplit'] = $this->visual->get_harga_terbaru_by_jenis('hpp_komplit_layer');
         $data['stat_hpp_broiler'] = $this->visual->get_harga_terbaru_by_jenis('hpp_broiler');
-
+        $data['stat_pakan_campuran'] = $this->visual->get_harga_terbaru_by_jenis('pakan_campuran');
+        
         $raw_telur = $this->_get_monthly_data_by_commodity('telur', null);
         $raw_lb = $this->_get_monthly_data_by_commodity('live_bird', null);
         $raw_jagung = $this->_get_monthly_data_by_commodity('jagung', null);

@@ -1553,6 +1553,15 @@ public function get_kasus_detail_list($year, $user_id = null, $area_id = null) {
         return $this->db->where('nama_harga', 'Pakan Komplit Layer')->get()->row_array();
     }
 
+    public function get_harga_pakan_campuran_hari_ini() {
+        $this->db->select('nilai_rata_rata, jumlah_sumber_data');
+        $this->db->from('harga_rata_rata_harian');
+        $this->db->where('jenis_harga', 'pakan_campuran');
+        $this->db->order_by('tanggal', 'DESC');
+        $this->db->limit(1);
+        return $this->db->get()->row_array();
+    }
+
     public function get_all_tipe_ternak()
     {
         $this->db->select('tipe_ternak');
@@ -2038,6 +2047,14 @@ public function get_monthly_empty_capacity($tipe_ternak = null, $selected_years 
             }
             return $data;
         }
+
+        elseif ($jenis_harga_key === 'pakan_campuran') {
+        $data = $this->get_harga_pakan_campuran_hari_ini();
+        if (!empty($data)) {
+            $data['tanggal'] = date('Y-m-d');
+        }
+        return $data;
+    }
 
         $today = date('Y-m-d');
 

@@ -527,7 +527,60 @@ class M_master_harga extends CI_Model {
         $this->update_harga($id_harga, ['nilai_harga' => $nilai_rata_rata_hari_ini]);
         return true;
     }
-    
+
+    public function proses_harga_pakan_campuran_harian($id_harga)
+        {
+            $tanggal_hari_ini = date('Y-m-d');
+            $jenis_harga = 'pakan_campuran';
+
+            // Ambil komponen dari harga harian terbaru
+            // Kalau 0, fallback ke master_harga
+            $harga_jagung = $this->_get_harga_terbaru_harian('harga_jagung');
+            if ($harga_jagung == 0) {
+                $harga_jagung = $this->_get_harga_by_nama('Average Harga Jagung');
+            }
+
+            $harga_katul = $this->_get_harga_terbaru_harian('harga_katul');
+            if ($harga_katul == 0) {
+                $harga_katul = $this->_get_harga_by_nama('Average Harga Katul');
+            }
+
+            $harga_konsentrat = $this->_get_harga_terbaru_harian('harga_konsentrat_layer');
+            if ($harga_konsentrat == 0) {
+                $harga_konsentrat = $this->_get_harga_by_nama('Average Harga Konsentrat Layer');
+            }
+
+            // Validasi
+            if ($harga_jagung == 0 || $harga_katul == 0 || $harga_konsentrat == 0) {
+                log_message('error', "Gagal menghitung Pakan Campuran: salah satu komponen bernilai 0.");
+                return false;
+            }
+
+            // Rumus: 50% Jagung + 15% Katul + 35% Konsentrat Layer
+            $nilai_akhir = ($harga_jagung * 0.50)
+                        + ($harga_katul * 0.15)
+                        + ($harga_konsentrat * 0.35);
+
+            $data_harian = [
+                'master_harga_id'    => $id_harga,
+                'jenis_harga'        => $jenis_harga,
+                'tanggal'            => $tanggal_hari_ini,
+                'nilai_rata_rata'    => $nilai_akhir,
+                'jumlah_sumber_data' => 1
+            ];
+
+            $where = ['master_harga_id' => $id_harga, 'tanggal' => $tanggal_hari_ini, 'jenis_harga' => $jenis_harga];
+            if ($this->db->get_where('harga_rata_rata_harian', $where)->num_rows() > 0) {
+                $this->db->update('harga_rata_rata_harian', $data_harian, $where);
+            } else {
+                $this->db->insert('harga_rata_rata_harian', $data_harian);
+            }
+
+            $this->update_harga($id_harga, ['nilai_harga' => $nilai_akhir]);
+
+            return true;
+        }
+            
     public function hitung_rata_rata_bulanan_afkir($id_harga, $tahun, $bulan)
     {
         $jenis_harga = 'harga_afkir';
@@ -1772,6 +1825,12 @@ class M_master_harga extends CI_Model {
                 $this->proses_hpp_konsentrat_layer_harian($id_hpp_konsentrat);
                 $this->hitung_rata_rata_bulanan_hpp_konsentrat_layer($id_hpp_konsentrat, $tahun_sekarang, $bulan_sekarang);
                 $this->hitung_rata_rata_tahunan_hpp_konsentrat_layer($id_hpp_konsentrat, $tahun_sekarang);
+            }
+
+            // --- Proses Pakan Campuran (setelah konsentrat layer) ---
+            $id_pakan_campuran = $this->_get_id_by_nama_harga('Pakan Campuran');
+            if ($id_pakan_campuran) {
+                $this->proses_harga_pakan_campuran_harian($id_pakan_campuran);
             }
 
             // --- 14. Proses HPP Komplit Layer (Turunan) ---
