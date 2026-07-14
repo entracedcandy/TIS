@@ -1099,8 +1099,20 @@ public function get_kasus_detail_list($year, $user_id = null, $area_id = null) {
     {
         $this->db->select('nilai_rata_rata, jumlah_sumber_data');
         $this->db->from('harga_rata_rata_harian');
-        $this->db->where('jenis_harga', 'harga_jagung'); 
+        $this->db->where('master_harga_id', '5'); 
         $this->db->where('tanggal', date('Y-m-d'));
+        return $this->db->get()->row_array();
+    }
+
+        public function get_harga_jagung_kemarin()
+    {
+        $this->db->select('nilai_rata_rata, jumlah_sumber_data');
+        $this->db->from('harga_rata_rata_harian');
+        $this->db->where('master_harga_id', '5'); 
+         $this->db->where('nilai_rata_rata IS NOT NULL');
+        $this->db->where('nilai_rata_rata >', 0);
+        $this->db->order_by('tanggal', 'DESC');
+        $this->db->limit(1);
         return $this->db->get()->row_array();
     }
 
@@ -1144,8 +1156,20 @@ public function get_kasus_detail_list($year, $user_id = null, $area_id = null) {
     {
         $this->db->select('nilai_rata_rata, jumlah_sumber_data');
         $this->db->from('harga_rata_rata_harian');
-        $this->db->where('jenis_harga', 'harga_katul'); 
+        $this->db->where('master_harga_id', '6'); 
         $this->db->where('tanggal', date('Y-m-d'));
+        return $this->db->get()->row_array();
+    }
+
+    public function get_harga_katul_kemarin()
+    {
+        $this->db->select('nilai_rata_rata, jumlah_sumber_data');
+        $this->db->from('harga_rata_rata_harian');
+        $this->db->where('master_harga_id', '6'); 
+         $this->db->where('nilai_rata_rata IS NOT NULL');
+        $this->db->where('nilai_rata_rata >', 0);
+        $this->db->order_by('tanggal', 'DESC');
+        $this->db->limit(1);
         return $this->db->get()->row_array();
     }
 
@@ -2017,6 +2041,58 @@ public function get_monthly_empty_capacity($tipe_ternak = null, $selected_years 
     $query = $this->db->query($final_query);
     return $query->result_array();
 }
+
+public function get_harga_pakan_campuran_by_Id_NMD()
+{
+    $today = date('Y-m-d');
+    $yesterday = date('Y-m-d', strtotime('-1 days')); 
+
+    // 1. Coba ambil data HARI INI
+    $data_jagung = $this->get_harga_jagung_hari_ini();
+    $data_katul  = $this->get_harga_katul_hari_ini();
+    $hasil_campuran = 0; 
+    
+    // 2. Cek apakah data HARI INI lengkap?
+    if (!empty($data_jagung) && !empty($data_katul)) {
+        $data_jagung['tanggal'] = $today;
+        $data_katul['tanggal']  = $today;
+        log_message('debug', 'Pakan Campuran: Menggunakan data HARI INI');
+    } else {
+        // 3. JIKA HARI INI KOSONG, ambil data KEMARIN
+        log_message('debug', 'Pakan Campuran: Data hari ini kosong, mengambil data KEMARIN');
+        
+        $data_jagung = $this->get_harga_jagung_kemarin();
+        $data_katul  = $this->get_harga_katul_kemarin();
+        
+        if (!empty($data_jagung) && !empty($data_katul)) {
+            $data_jagung['tanggal'] = $yesterday;
+            $data_katul['tanggal']  = $yesterday;
+            log_message('debug', 'Pakan Campuran: Menggunakan data KEMARIN');
+        } else {
+            log_message('error', 'Gagal menghitung: Data jagung/katul hari ini dan kemarin tidak ditemukan.');
+            return $hasil_campuran; 
+        }
+    }
+
+    // 4. Ambil data konsentrat dan VALIDASI
+    $get_konsentrat = $this->db->get_where('master_harga', ['id_harga' => '13'], 1)->row_array();
+
+    if (empty($get_konsentrat)) {
+        log_message('error', 'Gagal menghitung: Data konsentrat (id_harga: 13) tidak ditemukan di database.');
+        return $hasil_campuran; // Menghentikan proses dan mereturn 0 agar tidak error
+    }
+
+    $harga_konsentrat = $get_konsentrat['nilai_harga'];  
+    
+    // 5. PROSES RUMUS 
+    // Pastikan key dari data_jagung dan data_katul benar-benar bernama 'harga' (sesuaikan dengan query-mu)
+    $harga_jagung = $data_jagung['nilai_rata_rata'];
+    $harga_katul  = $data_katul['nilai_rata_rata'];
+    
+    $hasil_campuran = ($harga_jagung * 0.5) + ($harga_katul * 0.15) + ($harga_konsentrat * 0.35);
+    
+    return $hasil_campuran;
+}    
 
     public function get_harga_terbaru_by_jenis($jenis_harga_key)
     {

@@ -114,7 +114,7 @@ function render_stat_block($title, $data) {
                 <!-- Kolom Kanan - Stats (Tetap 3 kolom di mobile) -->
                 <div class="col-4 col-md-3 d-flex flex-column justify-content-between">
                     <div class="mb-2 mb-md-4">
-                        <?php render_stat_block('Pakan Campuran', $stat_konsentrat); ?>
+                      <?php render_stat_block('Pakan Campuran', $stat_konsentrat); ?>
                     </div>
                     <div class="mb-2 mb-md-4">
                         <?php render_stat_block('HPP Telur (Konsentrat)', $stat_hpp_konsentrat); ?>
