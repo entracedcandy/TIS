@@ -1158,7 +1158,7 @@ class Dashboard_new extends MY_Controller
         $data['stat_katul'] = $this->visual->get_harga_terbaru_by_jenis('harga_katul');
         $data['stat_pakan_layer'] = $this->visual->get_harga_terbaru_by_jenis('pakan_komplit_layer'); 
         $data['stat_pakan_broiler'] = $this->visual->get_harga_pakan_broiler_hari_ini();
-        $data['stat_konsentrat'] = $this->visual->get_harga_terbaru_by_jenis('pakan_campuran');
+        $data['stat_konsentrat'] = $this->visual->get_harga_pakan_campuran_by_Id_NMD();
         $data['stat_hpp_konsentrat'] = $this->visual->get_harga_terbaru_by_jenis('hpp_konsentrat_layer');
         $data['stat_hpp_komplit'] = $this->visual->get_harga_terbaru_by_jenis('hpp_komplit_layer');
         $data['stat_hpp_broiler'] = $this->visual->get_harga_terbaru_by_jenis('hpp_broiler');
