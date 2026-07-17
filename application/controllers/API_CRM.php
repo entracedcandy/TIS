@@ -8702,7 +8702,7 @@ class API_CRM extends CI_Controller {
 		}
 	}
 
-	function dataLayerTemp(){
+	function dataLayerTemp()
 		$start = new DateTime("2026-04-15");
 		$end   = new DateTime("2026-04-15");
 

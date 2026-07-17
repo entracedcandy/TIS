@@ -154,9 +154,9 @@
 
                                                 <?php
                                                 $item_dengan_indikator = [
-                                                    'Average Harga Telur Puyuh',
-                                                    'Average Harga Telur Bebek',
-                                                    'Average Harga Live Bird'
+                                                    'Harga Telur Puyuh',
+                                                    'Harga Telur Bebek',
+                                                    'Harga Live Bird'
                                                 ];
                                                 ?>
                                                 <?php if (isset($data['nama_harga']) && in_array($data['nama_harga'], $item_dengan_indikator)): ?>
