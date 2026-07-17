@@ -1825,7 +1825,8 @@ class Admin_Controller extends CI_Controller {
                         'Ongkos OVK Broiler'              => 'ongkos_ovk_broiler',
                         'Daya Hidup Broiler (%)'          => 'daya_hidup_broiler',
                         'Biaya Operasional Broiler'       => 'biaya_operasional_broiler',
-                        'Target Profit Broiler'           => 'target_profit_broiler'
+                        'Target Profit Broiler'           => 'target_profit_broiler',
+                        'DOC'                             => 'harga_doc',
                     ];
 
                     
@@ -2213,10 +2214,14 @@ class Admin_Controller extends CI_Controller {
                 'Ongkos Kirim',
                 'DOC',
                 'Ongkos OVK Broiler',
+                'Harga Pakan Konsentrat Layer',
                 'Daya Hidup Broiler (%)',
                 'Biaya Operasional Broiler',
                 'Target Profit Broiler',
-                'Pakan Campuran'
+                'Pakan Campuran',
+                'Average Harga Telur Puyuh', 
+                'Average Harga Telur Bebek',  
+                'Average Harga Live Bird',    
             ];
 
             $this->db->where_in('nama_harga', $nama_harga_tampil);
@@ -2225,6 +2230,18 @@ class Admin_Controller extends CI_Controller {
 
             foreach ($all_harga as &$item) {
                 $item['nilai_harga'] = number_format($item['nilai_harga'], 0, ',', '.');
+
+                if ($item['nama_harga'] === 'Average Harga Telur Puyuh') {
+                        $item['nama_harga'] = 'Harga Telur Puyuh';
+                    }
+                if ($item['nama_harga'] === 'Average Harga Telur Bebek') {
+                        $item['nama_harga'] = 'Harga Telur Bebek';
+                    }
+                if ($item['nama_harga'] === 'Average Harga Live Bird') {
+                        $item['nama_harga'] = 'Harga Live Bird';
+                    }
+                
+                        
             }
             return [
                 'data' => $all_harga,
