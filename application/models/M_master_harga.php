@@ -545,7 +545,15 @@ class M_master_harga extends CI_Model {
                 $harga_katul = $this->_get_harga_by_nama('Average Harga Katul');
             }
 
-            $harga_konsentrat = $this->_get_harga_terbaru_harian('harga_konsentrat_layer');
+            $this->db->select('nilai_harga'); // Pastikan ini nama kolom harga yang benar
+            $this->db->from('master_harga');
+            $this->db->where('id_harga', 13);
+            $this->db->limit(1);
+            $harga = $this->db->get()->row_array();
+
+            // Ambil angkanya, atau set 0 jika null/tidak ketemu
+            $harga_konsentrat = isset($harga['nilai_harga']) ? (float) $harga['nilai_harga'] : 0;
+
             if ($harga_konsentrat == 0) {
                 $harga_konsentrat = $this->_get_harga_by_nama('Average Harga Konsentrat Layer');
             }
@@ -580,7 +588,7 @@ class M_master_harga extends CI_Model {
 
             return true;
         }
-            
+                     
     public function hitung_rata_rata_bulanan_afkir($id_harga, $tahun, $bulan)
     {
         $jenis_harga = 'harga_afkir';
