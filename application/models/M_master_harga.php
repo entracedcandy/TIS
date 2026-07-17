@@ -528,38 +528,37 @@ class M_master_harga extends CI_Model {
         return true;
     }
 
-    public function proses_harga_pakan_campuran_harian($id_harga)
-        {
-            $tanggal_hari_ini = date('Y-m-d');
-            $jenis_harga = 'pakan_campuran';
+   public function proses_harga_pakan_campuran_harian($id_harga)
+{
+    $tanggal_hari_ini = date('Y-m-d');
+    $jenis_harga = 'pakan_campuran';
 
-            // Ambil komponen dari harga harian terbaru
-            // Kalau 0, fallback ke master_harga
-            $harga_jagung = $this->_get_harga_terbaru_harian('harga_jagung');
-            if ($harga_jagung == 0) {
-                $harga_jagung = $this->_get_harga_by_nama('Average Harga Jagung');
-            }
+    // Ambil komponen dari harga harian terbaru
+    $harga_jagung_harian = $this->_get_harga_terbaru_harian('harga_jagung');
+    $harga_jagung = $harga_jagung_harian;
+    $sumber_jagung = 'harga_rata_rata_harian';
+    if ($harga_jagung == 0) {
+        $harga_jagung = $this->_get_harga_by_nama('Average Harga Jagung');
+        $sumber_jagung = 'master_harga (fallback)';
+    }
 
-            $harga_katul = $this->_get_harga_terbaru_harian('harga_katul');
-            if ($harga_katul == 0) {
-                $harga_katul = $this->_get_harga_by_nama('Average Harga Katul');
-            }
+    $harga_katul_harian = $this->_get_harga_terbaru_harian('harga_katul');
+    $harga_katul = $harga_katul_harian;
+    $sumber_katul = 'harga_rata_rata_harian';
+    if ($harga_katul == 0) {
+        $harga_katul = $this->_get_harga_by_nama('Average Harga Katul');
+        $sumber_katul = 'master_harga (fallback)';
+    }
 
-            $harga_konsentrat = $this->_get_harga_terbaru_harian('harga_konsentrat_layer');
-            if ($harga_konsentrat == 0) {
-                $harga_konsentrat = $this->_get_harga_by_nama('Average Harga Konsentrat Layer');
-            }
+    // Ambil langsung dari master_harga (input manual)
+    $harga_konsentrat = $this->_get_harga_by_nama('Harga Pakan Konsentrat Layer');
+    $sumber_konsentrat = 'master_harga (input manual)';
 
-            // Validasi
-            if ($harga_jagung == 0 || $harga_katul == 0 || $harga_konsentrat == 0) {
-                log_message('error', "Gagal menghitung Pakan Campuran: salah satu komponen bernilai 0.");
-                return false;
-            }
-
-            // Rumus: 50% Jagung + 15% Katul + 35% Konsentrat Layer
-            $nilai_akhir = ($harga_jagung * 0.50)
-                        + ($harga_katul * 0.15)
-                        + ($harga_konsentrat * 0.35);
+    // Perhitungan per komponen
+    $hasil_jagung     = $harga_jagung * 0.50;
+    $hasil_katul      = $harga_katul * 0.15;
+    $hasil_konsentrat = $harga_konsentrat * 0.35;
+    $nilai_akhir      = $hasil_jagung + $hasil_katul + $hasil_konsentrat;
 
             $data_harian = [
                 'master_harga_id'    => $id_harga,
